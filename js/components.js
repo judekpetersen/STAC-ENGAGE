@@ -80,7 +80,7 @@ function C_challengeRows(challenges) {
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
         <span style="font-size:12px;font-weight:500;color:${c.ic};">${c.pts} pts</span>
-        ${claimable ? `<button class="tbtn" onclick="doClaim(${c.id})">Claim</button>` :
+        ${claimable ? `<button class="tbtn" onclick="doClaim('${c.id}')">Claim</button>` :
           done ? `<button class="tbtn done" disabled>Claimed</button>` :
           c.state === 'locked' ? `<button class="tbtn lock" disabled>Locked</button>` :
           `<span style="font-size:10px;color:#8a8a80;">In progress</span>`}
@@ -97,7 +97,7 @@ function C_feedItems(feedItems) {
         <div class="feed-text"><b>${f.name}${f.you?' <span style="font-size:10px;color:#3B6D11;font-weight:400;">(you)</span>':''}</b> — ${f.text}</div>
         <div class="feed-time">${f.time}</div>
         <div class="feed-actions">
-          <span class="feed-act ${isLiked(f.id)?'liked':''}" onclick="doLike(${f.id})">
+          <span class="feed-act ${isLiked(f.id)?'liked':''}" onclick="doLike('${f.id}')">
             <i class="ti ti-heart"></i>
             <span id="lc-${f.id}">${f.likes}</span>
           </span>
@@ -118,7 +118,7 @@ function C_shopGrid(items) {
       <div class="shop-desc">${s.desc}</div>
       <div class="shop-footer">
         <span class="shop-cost"><i class="ti ti-star"></i> ${s.cost} pts</span>
-        <button class="tbtn ${isRedeemed(s.id)?'done':''}" onclick="doRedeem(${s.id})">${isRedeemed(s.id)?'Redeemed':'Redeem'}</button>
+        <button class="tbtn ${isRedeemed(s.id)?'done':''}" onclick="doRedeem('${s.id}')">${isRedeemed(s.id)?'Redeemed':'Redeem'}</button>
       </div>
     </div>`).join('')}</div>`;
 }
@@ -133,7 +133,7 @@ function C_orgList(orgs) {
         <div class="org-name">${o.name}</div>
         <div class="org-meta">${o.meta}</div>
       </div>
-      <button class="tbtn ${isOrgJoined(o.id)?'on':''}" onclick="doJoinOrg(${o.id},this)">${isOrgJoined(o.id)?'Joined':'Join'}</button>
+      <button class="tbtn ${isOrgJoined(o.id)?'on':''}" onclick="doJoinOrg('${o.id}',this)">${isOrgJoined(o.id)?'Joined':'Join'}</button>
     </div>`).join('');
 }
 

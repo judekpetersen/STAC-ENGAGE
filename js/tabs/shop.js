@@ -60,7 +60,7 @@ function prizeCard(s) {
       <div class="shop-desc">${s.desc}</div>
       <div class="shop-footer">
         <span class="shop-cost"><i class="ti ti-star"></i> ${s.cost} pts</span>
-        <button class="tbtn ${redeemed?'done':''}" onclick="redeemPrize(${s.id})">
+        <button class="tbtn ${redeemed?'done':''}" onclick="redeemPrize('${s.id}')">
           ${redeemed ? (s.raffle?'Entered':'Redeemed') : (s.raffle?'Enter raffle':'Redeem')}
         </button>
       </div>

@@ -101,7 +101,7 @@
           : `<div style="margin-top:8px;">
               <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:#8a8a80;margin-bottom:6px;">Bookable spaces</div>
               ${spacesHere.map(s => `
-                <div onclick="selectSpace(${s.id})" style="display:flex;align-items:center;gap:9px;padding:8px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;">
+                <div onclick="selectSpace('${s.id}')" style="display:flex;align-items:center;gap:9px;padding:8px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;">
                   <div style="width:30px;height:30px;border-radius:6px;background:${s.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                     <i class="ti ${s.icon}" style="color:${s.color};font-size:14px;"></i>
                   </div>
@@ -146,7 +146,7 @@
           ${s.features.map(f => `<div style="font-size:12px;color:var(--text-2);padding:3px 0;display:flex;align-items:center;gap:6px;"><i class="ti ti-check" style="font-size:11px;color:${s.color};"></i>${f}</div>`).join('')}
         </div>
         ${s.rate > 0 ? `<div style="font-size:12px;color:#8a8a80;margin-bottom:10px;"><i class="ti ti-coin" style="font-size:12px;"></i> $${s.rate}/hr (external events)</div>` : ''}
-        <button class="btn-primary" style="${s.available?'':'opacity:0.4;pointer-events:none;'}" onclick="showBookingModal(${s.id})">
+        <button class="btn-primary" style="${s.available?'':'opacity:0.4;pointer-events:none;'}" onclick="showBookingModal('${s.id}')">
           ${s.available ? '<i class="ti ti-calendar-plus"></i> Book this space' : 'Currently unavailable'}
         </button>
       </div>`;
@@ -179,7 +179,7 @@
           </div>
           <div class="modal-footer">
             <button onclick="closeModal()" style="background:none;border:1px solid var(--border-md);border-radius:8px;padding:9px 18px;font-size:13px;color:var(--text-2);cursor:pointer;font-family:var(--font-body);">Cancel</button>
-            <button class="btn-primary" style="width:auto;padding:9px 22px;" onclick="submitBooking(${s.id})">Submit request</button>
+            <button class="btn-primary" style="width:auto;padding:9px 22px;" onclick="submitBooking('${s.id}')">Submit request</button>
           </div>
         </div>
       </div>`;

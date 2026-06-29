@@ -86,13 +86,13 @@ function requestCard(r) {
 
       ${status === 'pending' ? `
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <button class="btn-approve" onclick="approveRequest(${r.id})">
+          <button class="btn-approve" onclick="approveRequest('${r.id}')">
             <i class="ti ti-check" style="font-size:11px;"></i> Approve &amp; publish
           </button>
-          <button class="btn-deny" onclick="showDenyForm(${r.id})">
+          <button class="btn-deny" onclick="showDenyForm('${r.id}')">
             <i class="ti ti-x" style="font-size:11px;"></i> Deny
           </button>
-          <button class="btn-secondary" onclick="showRequestNote(${r.id})">
+          <button class="btn-secondary" onclick="showRequestNote('${r.id}')">
             <i class="ti ti-message" style="font-size:11px;"></i> Request changes
           </button>
         </div>
@@ -101,8 +101,8 @@ function requestCard(r) {
             <input type="text" id="deny-note-${r.id}"
               style="flex:1;border:1px solid var(--border-md);border-radius:var(--radius);padding:7px 10px;font-size:12px;font-family:var(--font-body);background:var(--surface);color:var(--text);outline:none;"
               placeholder="Reason for denial (shown to student)...">
-            <button class="btn-deny" onclick="confirmDenyRequest(${r.id})">Confirm denial</button>
-            <button class="btn-secondary" onclick="hideDenyForm(${r.id})">Cancel</button>
+            <button class="btn-deny" onclick="confirmDenyRequest('${r.id}')">Confirm denial</button>
+            <button class="btn-secondary" onclick="hideDenyForm('${r.id}')">Cancel</button>
           </div>
         </div>` :
         status === 'approved' ? `
@@ -111,14 +111,14 @@ function requestCard(r) {
             <i class="ti ti-check-circle" style="font-size:15px;"></i>
             Published to campus calendar
           </span>
-          <button class="btn-secondary" onclick="revokeRequest(${r.id})">Revoke</button>
+          <button class="btn-secondary" onclick="revokeRequest('${r.id}')">Revoke</button>
         </div>` :
         `<div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:12px;color:#993556;display:flex;align-items:center;gap:5px;">
             <i class="ti ti-x-circle" style="font-size:15px;"></i>
             Denied${eventRequestNotes[r.id]?` — "${eventRequestNotes[r.id]}"`:''}
           </span>
-          <button class="btn-secondary" onclick="approveRequest(${r.id})">Approve instead</button>
+          <button class="btn-secondary" onclick="approveRequest('${r.id}')">Approve instead</button>
         </div>`}
     </div>`;
 }

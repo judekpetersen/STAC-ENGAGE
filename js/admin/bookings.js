@@ -74,9 +74,9 @@ function bookingRow(b) {
     <td>
       <div class="action-row" id="bactions-${b.id}">
         ${status === 'pending' ? `
-          <button class="btn-approve" onclick="approveBooking(${b.id})">Approve</button>
-          <button class="btn-deny" onclick="denyBooking(${b.id})">Deny</button>` :
-          `<button class="btn-secondary" onclick="resetBooking(${b.id})">Reset</button>`}
+          <button class="btn-approve" onclick="approveBooking('${b.id}')">Approve</button>
+          <button class="btn-deny" onclick="denyBooking('${b.id}')">Deny</button>` :
+          `<button class="btn-secondary" onclick="resetBooking('${b.id}')">Reset</button>`}
       </div>
     </td>
   </tr>`;
@@ -141,9 +141,9 @@ function refreshBookingRow(id) {
   const actions = document.getElementById('bactions-' + id);
   if (actions) {
     actions.innerHTML = status === 'pending'
-      ? `<button class="btn-approve" onclick="approveBooking(${id})">Approve</button>
-         <button class="btn-deny" onclick="denyBooking(${id})">Deny</button>`
-      : `<button class="btn-secondary" onclick="resetBooking(${id})">Reset</button>`;
+      ? `<button class="btn-approve" onclick="approveBooking('${id}')">Approve</button>
+         <button class="btn-deny" onclick="denyBooking('${id}')">Deny</button>`
+      : `<button class="btn-secondary" onclick="resetBooking('${id}')">Reset</button>`;
   }
 }
 

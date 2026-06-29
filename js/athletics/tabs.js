@@ -221,10 +221,10 @@ function renderAthleticsAnnouncements() {
             ${g.result
               ? `<span class="status-badge" style="background:${g.result.startsWith('W')?'#EAF3DE':'#FBEAF0'};color:${g.result.startsWith('W')?'#3B6D11':'#993556'};">${g.result}</span>`
               : `<span class="status-badge status-active">Upcoming</span>`}
-            <button class="btn-secondary" style="font-size:11px;" onclick="addResult(${g.id})">
+            <button class="btn-secondary" style="font-size:11px;" onclick="addResult('${g.id}')">
               ${g.result ? 'Edit result' : 'Add result'}
             </button>
-            <button class="btn-deny" style="font-size:11px;padding:4px 10px;" onclick="deleteAnnouncement(${g.id})">Remove</button>
+            <button class="btn-deny" style="font-size:11px;padding:4px 10px;" onclick="deleteAnnouncement('${g.id}')">Remove</button>
           </div>`).join('')}
         ${filtered.length === 0 ? `<div style="text-align:center;padding:2rem;color:#8a8a80;font-size:13px;">No ${athAnnouncementFilter} announcements</div>` : ''}
       </div>
@@ -320,9 +320,9 @@ function renderAthleticsBookings() {
                   <td>
                     <div class="action-row" id="athbactions-${b.id}">
                       ${bookingState[b.id]==='pending'
-                        ? `<button class="btn-approve" onclick="athApproveBooking(${b.id})">Approve</button>
-                           <button class="btn-deny" onclick="athDenyBooking(${b.id})">Deny</button>`
-                        : `<button class="btn-secondary" onclick="athResetBooking(${b.id})">Reset</button>`}
+                        ? `<button class="btn-approve" onclick="athApproveBooking('${b.id}')">Approve</button>
+                           <button class="btn-deny" onclick="athDenyBooking('${b.id}')">Deny</button>`
+                        : `<button class="btn-secondary" onclick="athResetBooking('${b.id}')">Reset</button>`}
                     </div>
                   </td>
                 </tr>`).join('')}

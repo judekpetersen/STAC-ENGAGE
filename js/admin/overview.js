@@ -45,8 +45,8 @@ function renderAdminOverview() {
             <div class="row-icon" style="background:#FAEEDA;"><i class="ti ti-building" style="color:#854F0B;"></i></div>
             <div class="row-info"><div class="row-name">${b.purpose}</div><div class="row-meta">${b.space} · ${b.date}</div></div>
             <div class="action-row">
-              <button class="btn-approve" onclick="adminApproveBooking(${b.id})">Approve</button>
-              <button class="btn-deny" onclick="adminDenyBooking(${b.id})">Deny</button>
+              <button class="btn-approve" onclick="adminApproveBooking('${b.id}')">Approve</button>
+              <button class="btn-deny" onclick="adminDenyBooking('${b.id}')">Deny</button>
             </div>
           </div>`).join('')}
         </div>

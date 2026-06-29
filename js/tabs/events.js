@@ -93,8 +93,8 @@ function C_eventRowV7(e) {
     ${needsFeedback
       ? `<button class="tbtn" style="background:#FAEEDA;color:#854F0B;border-color:#854F0B;" onclick="openFeedback('${e.id}')">Rate it</button>`
       : isFull
-        ? `<button class="tbtn ${onWaitlist?'on':''}" onclick="toggleWaitlist(${e.id},this)">${onWaitlist?'On waitlist':'Join waitlist'}</button>`
-        : `<button class="tbtn ${isRSVP(e.id)?'on':''}" onclick="doRSVP(${e.id},this)">${isRSVP(e.id)?'RSVPd':'RSVP'}</button>`}
+        ? `<button class="tbtn ${onWaitlist?'on':''}" onclick="toggleWaitlist('${e.id}',this)">${onWaitlist?'On waitlist':'Join waitlist'}</button>`
+        : `<button class="tbtn ${isRSVP(e.id)?'on':''}" onclick="doRSVP('${e.id}',this)">${isRSVP(e.id)?'RSVPd':'RSVP'}</button>`}
   </div>`;
 }
 
@@ -135,7 +135,7 @@ function openFeedback(eventId) {
           <div style="margin-bottom:1rem;">
             <div style="font-size:12px;font-weight:500;color:#8a8a80;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Overall rating</div>
             <div style="display:flex;gap:8px;" id="star-row">
-              ${[1,2,3,4,5].map(n => `<button onclick="setStars(${n})" id="star-${n}" style="font-size:28px;background:none;border:none;cursor:pointer;color:#d0cfc8;transition:color .1s;">★</button>`).join('')}
+              ${[1,2,3,4,5].map(n => `<button onclick="setStars('${n}')" id="star-${n}" style="font-size:28px;background:none;border:none;cursor:pointer;color:#d0cfc8;transition:color .1s;">★</button>`).join('')}
             </div>
           </div>
           <div class="field"><label>What did you enjoy?</label><input type="text" id="fb-good" placeholder="e.g. Great speakers, good food..."></div>

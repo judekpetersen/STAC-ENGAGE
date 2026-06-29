@@ -108,7 +108,7 @@ function renderSGAClubs() {
             : `<div style="display:flex;gap:6px;flex-wrap:wrap;">
                 ${officers.map(p => {
                   const pc = POSITION_COLORS[p.position] || { bg:'#EEEDFE', color:'#533AB7', icon:'ti-star' };
-                  return `<div onclick="openSGAMessage(${p.student.id})" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-2);border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);">
+                  return `<div onclick="openSGAMessage('${p.student.id}')" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-2);border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);">
                     <div class="stu-av" style="background:${p.student.bg};color:${p.student.fc};width:26px;height:26px;font-size:10px;">${p.student.ini}</div>
                     <div>
                       <div style="font-size:12px;font-weight:500;color:var(--text);">${p.student.name}</div>
@@ -159,7 +159,7 @@ function renderSGAMessages() {
             const last = thread?.messages[thread.messages.length-1];
             const unread = last?.from === 'officer';
             const pc = POSITION_COLORS[p.position] || { bg:'#EEEDFE', color:'#533AB7' };
-            return `<div onclick="selectSGAThread(${p.student.id})" style="padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;${activeSGAThread===p.student.id?'background:var(--surface-2);':''}">
+            return `<div onclick="selectSGAThread('${p.student.id}')" style="padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;${activeSGAThread===p.student.id?'background:var(--surface-2);':''}">
               <div style="display:flex;align-items:center;gap:9px;">
                 <div class="stu-av" style="background:${p.student.bg};color:${p.student.fc};">${p.student.ini}</div>
                 <div style="flex:1;min-width:0;">

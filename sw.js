@@ -3,51 +3,51 @@
    Handles: offline caching, background sync, push notifications
    ============================================================ */
 
-const APP_VERSION   = 'stac-engage-v1.2.0';
+const APP_VERSION   = 'stac-engage-v1.3.0';
 const CACHE_STATIC  = `${APP_VERSION}-static`;
 const CACHE_DYNAMIC = `${APP_VERSION}-dynamic`;
 
 /* Files to cache immediately on install */
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/app.html',
-  '/admin.html',
-  '/manifest.json',
-  '/css/main.css',
-  '/css/admin.css',
-  '/js/data.js',
-  '/js/spaces-data.js',
-  '/js/admin-data.js',
-  '/js/state.js',
-  '/js/components.js',
-  '/js/auth.js',
-  '/js/app-v2.js',
-  '/js/supabase-client.js',
-  '/js/tabs/dashboard.js',
-  '/js/tabs/calendar.js',
-  '/js/tabs/map.js',
-  '/js/tabs/events.js',
-  '/js/tabs/transcript.js',
-  '/js/tabs/pathways.js',
-  '/js/tabs/leaderboard.js',
-  '/js/tabs/streaks.js',
-  '/js/tabs/shop.js',
-  '/js/tabs/feed.js',
-  '/js/tabs/orgs.js',
-  '/js/tabs/clubvclub.js',
-  '/js/tabs/profile.js',
-  '/js/tabs/notifications.js',
-  '/js/admin/overview.js',
-  '/js/admin/bookings.js',
-  '/js/admin/events.js',
-  '/js/admin/checkin.js',
-  '/js/admin/students.js',
-  '/js/admin/reports.js',
-  '/js/admin/notifications.js',
-  '/js/admin/app.js',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
+  './',
+  'index.html',
+  'app.html',
+  'admin.html',
+  'manifest.json',
+  'css/main.css',
+  'css/admin.css',
+  'js/data.js',
+  'js/spaces-data.js',
+  'js/admin-data.js',
+  'js/state.js',
+  'js/components.js',
+  'js/auth.js',
+  'js/app-v2.js',
+  'js/supabase-client.js',
+  'js/tabs/dashboard.js',
+  'js/tabs/calendar.js',
+  'js/tabs/map.js',
+  'js/tabs/events.js',
+  'js/tabs/transcript.js',
+  'js/tabs/pathways.js',
+  'js/tabs/leaderboard.js',
+  'js/tabs/streaks.js',
+  'js/tabs/shop.js',
+  'js/tabs/feed.js',
+  'js/tabs/orgs.js',
+  'js/tabs/clubvclub.js',
+  'js/tabs/profile.js',
+  'js/tabs/notifications.js',
+  'js/admin/overview.js',
+  'js/admin/bookings.js',
+  'js/admin/events.js',
+  'js/admin/checkin.js',
+  'js/admin/students.js',
+  'js/admin/reports.js',
+  'js/admin/notifications.js',
+  'js/admin/app.js',
+  'icons/icon-192.png',
+  'icons/icon-512.png',
 ];
 
 /* External resources to cache (fonts, icons) */
@@ -165,7 +165,7 @@ self.addEventListener('fetch', event => {
         if (cached) return cached;
         // Offline fallback for HTML navigation
         if (request.headers.get('accept')?.includes('text/html')) {
-          return caches.match('/app.html');
+          return caches.match('app.html');
         }
       }))
   );
@@ -180,10 +180,10 @@ self.addEventListener('push', event => {
 
   const options = {
     body:    data.body    || 'You have a new notification',
-    icon:    data.icon    || '/icons/icon-192.png',
-    badge:   data.badge   || '/icons/icon-72.png',
+    icon:    data.icon    || 'icons/icon-192.png',
+    badge:   data.badge   || 'icons/icon-72.png',
     tag:     data.tag     || 'stac-notif',
-    data:    data.data    || { url: '/app.html' },
+    data:    data.data    || { url: 'app.html' },
     actions: data.actions || [],
     vibrate: [100, 50, 100],
     renotify: true,
@@ -197,7 +197,7 @@ self.addEventListener('push', event => {
 /* ---- Notification click ---- */
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  const url = event.notification.data?.url || '/app.html';
+  const url = event.notification.data?.url || 'app.html';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
       // If app is already open, focus it

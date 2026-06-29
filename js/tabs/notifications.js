@@ -1,4 +1,5 @@
 /* ============================================================
+let liveNotifications = [];
    STAC Engage — Notifications Tab
    Supabase: query `notifications` for current user, realtime subscription
    ============================================================ */
@@ -66,7 +67,6 @@ async function markAllRead() {
 }
 
 /* ── Live Supabase wiring ─────────────────────────────── */
-let liveNotifications = [];
 
 async function loadNotificationsFromDB() {
   const user = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');

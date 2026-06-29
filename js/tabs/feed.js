@@ -44,7 +44,7 @@ function renderFeed() {
         </div>
         <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
           ${filtered.map(l => `
-            <div style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;background:var(--surface);cursor:pointer;" onclick="viewListing(${l.id})">
+            <div style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;background:var(--surface);cursor:pointer;" onclick="viewListing('${l.id}')">
               <div style="width:36px;height:36px;border-radius:var(--radius);background:${l.bg};display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
                 <i class="ti ${l.category==='Textbook'?'ti-book':'ti-home'}" style="color:${l.ic};font-size:17px;"></i>
               </div>
@@ -52,7 +52,7 @@ function renderFeed() {
               <div style="font-size:11px;color:#8a8a80;margin-bottom:6px;">${l.condition} · ${l.posted}</div>
               <div style="display:flex;align-items:center;justify-content:space-between;">
                 <span style="font-size:14px;font-weight:600;color:#3B6D11;">$${l.price}</span>
-                <button class="tbtn" style="font-size:10px;padding:3px 9px;" onclick="event.stopPropagation();contactSeller(${l.id})">Contact</button>
+                <button class="tbtn" style="font-size:10px;padding:3px 9px;" onclick="event.stopPropagation();contactSeller('${l.id}')">Contact</button>
               </div>
             </div>`).join('')}
         </div>
