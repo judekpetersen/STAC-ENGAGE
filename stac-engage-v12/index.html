@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAC Engage</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#6b1a1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="STAC Engage">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png">
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body class="login-page">
+
+<div class="login-layout">
+
+  <div class="login-brand">
+    <div class="brand-lockup">
+      <div class="brand-seal">
+        <div class="seal-inner">S</div>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">STAC Engage</div>
+        <div class="brand-college">Saint Thomas Aquinas College</div>
+      </div>
+    </div>
+    <div class="brand-tagline">Your co-curricular life,<br><em>all in one place.</em></div>
+    <div class="brand-stats">
+      <div class="bstat"><span class="bstat-n">14</span><span class="bstat-l">Campus venues</span></div>
+      <div class="bstat-div"></div>
+      <div class="bstat"><span class="bstat-n">200+</span><span class="bstat-l">Active students</span></div>
+      <div class="bstat-div"></div>
+      <div class="bstat"><span class="bstat-n">50+</span><span class="bstat-l">Events per term</span></div>
+    </div>
+  </div>
+
+  <div class="login-panel">
+    <div class="login-form-wrap">
+      <div id="view-login">
+        <h2 class="form-title">Sign in</h2>
+        <p class="form-sub">Use your STAC student email</p>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="jdoe@stac.edu" autocomplete="email">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div class="field-row">
+          <label class="check-wrap"><input type="checkbox"> <span>Remember me</span></label>
+          <a href="#" class="link-sm">Forgot password?</a>
+        </div>
+        <button class="btn-primary" onclick="doLogin()">Sign in <i class="ti ti-arrow-right"></i></button>
+        <p class="form-switch">New student? <a href="#" onclick="showView('view-signup')" class="link-sm">Create account</a></p>
+
+        <div style="margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+          <p style="text-align:center;font-size:12px;color:#8a8a80;margin-bottom:10px;">Staff &amp; faculty access</p>
+          <a href="admin.html" style="
+            display:flex;align-items:center;justify-content:center;gap:8px;
+            width:100%;height:40px;
+            border:1px solid var(--border-md);border-radius:var(--radius);
+            font-size:13px;font-weight:500;color:#5a5a52;
+            text-decoration:none;
+            transition:all .15s;
+            font-family:var(--font-body);
+          " onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">
+            <i class="ti ti-shield" style="font-size:15px;color:#6b1a1a;"></i>
+            Admin portal
+          </a>
+        </div>
+      </div>
+
+      <div id="view-signup" style="display:none;">
+        <h2 class="form-title">Create account</h2>
+        <p class="form-sub">Join the STAC Engage community</p>
+        <div class="field-row-2">
+          <div class="field"><label>First name</label><input type="text" id="su-first" placeholder="Jude"></div>
+          <div class="field"><label>Last name</label><input type="text" id="su-last" placeholder="Murphy"></div>
+        </div>
+        <div class="field"><label>STAC email</label><input type="email" id="su-email" placeholder="jmurphy@stac.edu"></div>
+        <div class="field"><label>Major</label>
+          <select id="su-major">
+            <option value="">Select your major</option>
+            <option>Hospitality Management</option>
+            <option>Business Administration</option>
+            <option>Psychology</option>
+            <option>Education</option>
+            <option>Criminal Justice</option>
+            <option>Biology</option>
+            <option>English</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field-row-2">
+          <div class="field"><label>Class year</label>
+            <select id="su-year">
+              <option>2026</option><option>2027</option><option selected>2028</option><option>2029</option>
+            </select>
+          </div>
+          <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="Min. 8 characters"></div>
+        </div>
+        <button class="btn-primary" onclick="doSignup()">Create account <i class="ti ti-arrow-right"></i></button>
+        <p class="form-switch">Already have an account? <a href="#" onclick="showView('view-login')" class="link-sm">Sign in</a></p>
+      </div>
+
+      <div id="view-onboard" style="display:none;">
+        <div class="onboard-welcome">
+          <div class="onboard-avatar" id="ob-avatar">JM</div>
+          <h2 class="form-title" id="ob-name">Welcome, Jude!</h2>
+          <p class="form-sub">Let's set up your profile in 30 seconds</p>
+        </div>
+        <p class="field-label-sm">What are you involved in? (select all that apply)</p>
+        <div class="interest-grid" id="interest-grid"></div>
+        <button class="btn-primary" onclick="finishOnboard()" style="margin-top:1.25rem;">Go to dashboard <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

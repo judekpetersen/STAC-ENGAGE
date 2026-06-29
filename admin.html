@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAC Engage — Admin</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#6b1a1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="STAC Engage">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png">
+<link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="app-page">
+
+<div class="app-shell">
+  <aside class="sidebar" id="admin-sidebar" role="navigation" aria-label="Admin navigation">
+    <div class="sidebar-brand">
+      <div class="brand-seal sm"><div class="seal-inner">S</div></div>
+      <div>
+        <div class="brand-name sm">STAC Engage</div>
+        <div style="font-size:9px;color:#c8b560;letter-spacing:.08em;text-transform:uppercase;margin-top:1px;">Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav" id="admin-nav"></nav>
+    <div class="sidebar-user" id="admin-sidebar-user"></div>
+  </aside>
+
+  <div class="app-main">
+    <header class="app-header">
+      <div class="header-left">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+          <i class="ti ti-menu-2"></i>
+        </button>
+        <div id="admin-header-title" class="header-title">Overview</div>
+      </div>
+      <div class="header-right">
+        <span style="font-size:11px;background:#FAEEDA;color:#854F0B;padding:4px 10px;border-radius:999px;font-weight:500;">
+          <i class="ti ti-shield" style="font-size:11px;"></i> Admin
+        </span>
+        <a href="index.html" style="font-size:12px;color:#5a5a52;display:flex;align-items:center;gap:5px;padding:6px 10px;border:1px solid var(--border-md);border-radius:8px;text-decoration:none;">
+          <i class="ti ti-arrow-left" style="font-size:13px;"></i> Back to login
+        </a>
+        <div class="header-avatar" id="admin-avatar">JM</div>
+      </div>
+    </header>
+    <main class="app-content" id="admin-content" role="main" aria-live="polite"></main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/portal-auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/spaces-data.js"></script>
+<script src="js/admin-data.js"></script>
+<script src="js/admin/overview.js"></script>
+<script src="js/admin/bookings.js"></script>
+<script src="js/admin/events.js"></script>
+<script src="js/admin/calendar.js"></script>
+<script src="js/admin/checkin.js"></script>
+<script src="js/admin/students.js"></script>
+<script src="js/admin/reports.js"></script>
+<script src="js/admin/notifications.js"></script>
+<script src="js/admin/messages.js"></script>
+<script src="js/admin/positions.js"></script>
+<script src="js/admin/academic.js"></script>
+<script src="js/admin/service.js"></script>
+<script src="js/admin/requests.js"></script>
+<script src="js/admin/app.js"></script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>
