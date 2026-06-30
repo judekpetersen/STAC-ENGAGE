@@ -260,7 +260,7 @@ function closeEditEventModal() {
 function showCheckinQR(id) {
   const e = ADMIN_EVENTS_CREATED.find(ev => ev.id === id);
   if (!e) return;
-  const url = `${location.origin}/app.html?checkin=${id}`;
+  const url = `${location.origin}${location.pathname.replace(/admin\.html.*$/, '')}app.html?checkin=${id}`;
   const modal = document.createElement('div');
   modal.id = 'checkin-modal';
   modal.innerHTML = `

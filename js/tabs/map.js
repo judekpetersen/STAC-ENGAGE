@@ -168,7 +168,7 @@
             </div>
             <div class="field"><label>Event / purpose</label><input type="text" id="bk-name" placeholder="e.g. Business Club meeting, Study group..."></div>
             <div class="field-row-2">
-              <div class="field"><label>Date</label><input type="date" id="bk-date" value="2026-06-"></div>
+              <div class="field"><label>Date</label><input type="date" id="bk-date"></div>
               <div class="field"><label>Expected attendees</label><input type="number" id="bk-count" min="1" max="${s.capacity}" placeholder="How many?"></div>
             </div>
             <div class="field-row-2">
@@ -218,11 +218,39 @@
     document.body.appendChild(modal);
   };
 
-  window.submitBooking = function(spaceId) {
-    const name = document.getElementById('bk-name').value.trim();
+  window.submitBooking = async function(spaceId) {
+    const s     = SPACES.find(sp => sp.id === spaceId);
+    const name  = document.getElementById('bk-name')?.value.trim();
+    const date  = document.getElementById('bk-date')?.value;
+    const count = document.getElementById('bk-count')?.value;
+    const start = document.getElementById('bk-start')?.value;
+    const end   = document.getElementById('bk-end')?.value;
+    const notes = document.getElementById('bk-notes')?.value.trim();
+
     if (!name) { alert('Please enter a purpose for the booking.'); return; }
-    closeModal();
-    showToast('Booking request submitted!');
+    if (!date) { alert('Please select a date.'); return; }
+
+    const user = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
+    if (!user.id) { showToast('Please sign in to request a booking.'); return; }
+
+    try {
+      const { error } = await db.from('bookings').insert({
+        user_id:        user.id,
+        purpose:         name,
+        booking_date:    date,
+        start_time:      start || null,
+        end_time:        end || null,
+        attendee_count:  parseInt(count) || 1,
+        notes:           (s ? s.name + (notes ? ' — ' + notes : '') : notes) || '',
+        status:          'pending',
+      });
+      if (error) throw error;
+      closeModal();
+      showToast('Booking request submitted — Student Engagement will review it.');
+    } catch(e) {
+      console.error('Booking submit failed:', e);
+      showToast('Could not submit — check your connection.');
+    }
   };
 
   function refreshPanel() {
@@ -266,7 +294,7 @@
         <p>${avail} of ${SPACES.length} spaces available · STAC campus is divided by Route 340</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:1rem;margin-bottom:1rem;">
+      <div class="map-layout-grid">
         <div class="card" style="overflow:hidden;">
           <div class="card-head">
             <div class="card-title"><i class="ti ti-map"></i>${activeZone === 'west' ? 'West of Route 340 — Main campus' : 'East of Route 340 — Athletics & residential'}</div>

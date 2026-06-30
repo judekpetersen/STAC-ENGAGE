@@ -287,7 +287,7 @@ async function submitEventRequest() {
       event_date:  date || null,
       start_time:  start || null,
       end_time:    end || null,
-      location:    space || 'TBD',
+      space:       space || 'TBD',
       org:         org || 'Independent',
       attendance:  parseInt(attend) || 0,
       description: desc,

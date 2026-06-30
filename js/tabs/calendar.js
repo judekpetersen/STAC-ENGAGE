@@ -268,7 +268,7 @@
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 220px;min-height:420px;">
+        <div class="cal-detail-grid">
           <div style="border-right:1px solid var(--border);padding:12px;">
             <div id="cal-main-grid">${renderMonthGrid()}</div>
           </div>

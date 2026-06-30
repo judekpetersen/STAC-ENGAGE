@@ -3,7 +3,7 @@
    Handles: offline caching, background sync, push notifications
    ============================================================ */
 
-const APP_VERSION   = 'stac-engage-v1.3.0';
+const APP_VERSION   = 'stac-engage-v1.7.0';
 const CACHE_STATIC  = `${APP_VERSION}-static`;
 const CACHE_DYNAMIC = `${APP_VERSION}-dynamic`;
 
@@ -41,11 +41,21 @@ const STATIC_ASSETS = [
   'js/admin/overview.js',
   'js/admin/bookings.js',
   'js/admin/events.js',
+  'js/admin/calendar.js',
   'js/admin/checkin.js',
   'js/admin/students.js',
   'js/admin/reports.js',
   'js/admin/notifications.js',
+  'js/admin/messages.js',
+  'js/admin/positions.js',
+  'js/admin/requests.js',
+  'js/admin/service.js',
+  'js/admin/academic.js',
   'js/admin/app.js',
+  'js/tabs/service.js',
+  'js/tabs/streaks.js',
+  'js/portal-auth.js',
+  'js/pwa.js',
   'icons/icon-192.png',
   'icons/icon-512.png',
 ];

@@ -90,7 +90,7 @@ async function doSignup() {
       password: pass,
       options: {
         data: { first_name: first, last_name: last, major, year },
-        emailRedirectTo: 'https://stac-engage.netlify.app/app.html',
+        emailRedirectTo: window.location.origin + window.location.pathname.replace('index.html','') + 'app.html',
       }
     });
     if (error) throw error;

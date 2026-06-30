@@ -1341,3 +1341,49 @@ body.reduce-motion *::after {
   animation-duration: 0.01ms !important;
   transition-duration: 0.01ms !important;
 }
+
+/* ── Campus Map Responsive Layout ────────────────────────── */
+.map-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 280px;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 860px) {
+  .map-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Calendar Detail Grid (student + admin) ──────────────── */
+.cal-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  min-height: 420px;
+}
+@media (max-width: 700px) {
+  .cal-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .cal-detail-grid > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+/* ── Admin Messages Layout Grid ──────────────────────────── */
+.messages-layout-grid {
+  display: grid;
+  grid-template-columns: 260px minmax(0,1fr);
+  min-height: 480px;
+}
+@media (max-width: 700px) {
+  .messages-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .messages-layout-grid > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+    max-height: 240px;
+  }
+}

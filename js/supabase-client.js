@@ -30,7 +30,7 @@ async function supaSignUp(email, password, meta) {
     password,
     options: {
       data: meta,
-      emailRedirectTo: 'https://stac-engage.netlify.app/app.html',
+      emailRedirectTo: window.location.origin + window.location.pathname.replace('index.html','') + 'app.html',
     }
   });
   if (error) throw error;
@@ -333,7 +333,7 @@ async function updateServiceHours(id, status, adminNote) {
 async function fetchAllBookings() {
   const { data, error } = await db
     .from('bookings')
-    .select('*, profiles(first_name, last_name)')
+    .select('*, profiles(first_name, last_name), spaces(name)')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data || [];

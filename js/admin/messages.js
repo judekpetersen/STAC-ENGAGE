@@ -88,7 +88,7 @@ function renderAdminMessages() {
     </div>
 
     <div class="card" style="overflow:hidden;">
-      <div style="display:grid;grid-template-columns:260px minmax(0,1fr);min-height:480px;">
+      <div class="messages-layout-grid">
 
         <!-- Thread list -->
         <div style="border-right:1px solid var(--border);overflow-y:auto;">

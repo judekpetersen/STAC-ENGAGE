@@ -160,7 +160,7 @@ async function loadBookingsFromDB() {
         userId: b.user_id,
         student: b.profiles ? `${b.profiles.first_name} ${b.profiles.last_name}` : 'Unknown',
         purpose: b.purpose,
-        space:   b.space_id || 'TBD',
+        space:   b.spaces?.name || (b.notes ? b.notes.split(' — ')[0] : 'TBD'),
         date:    b.booking_date,
         time:    b.start_time ? `${b.start_time} – ${b.end_time}` : '—',
         attendees: b.attendee_count || 0,
