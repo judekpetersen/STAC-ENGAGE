@@ -111,6 +111,16 @@ window.submitFeedbackSurvey = async function(eventId, eventPoints) {
     s.user.score = (s.user.score || 0) + 10;
     saveState();
     updateScoreDisplay();
+    // Notify admins about new feedback
+    const { data: admins } = await db.from('profiles').select('id').eq('role','admin');
+    const eventName = pendingFeedbackEvents.find(e => e.id === eventId)?.title || 'an event';
+    const stars = '★'.repeat(surveyStars) + '☆'.repeat(5 - surveyStars);
+    if (admins?.length) {
+      await db.from('notifications').insert(admins.map(a => ({
+        user_id: a.id, type: 'update', read: false,
+        text: `New feedback for "${eventName}": ${stars}${comment ? ' — "' + comment + '"' : ''}`,
+      })));
+    }
   } catch(e) { console.warn('Feedback submit failed:', e); }
 
   surveyStars = 0;

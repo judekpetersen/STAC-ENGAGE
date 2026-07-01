@@ -363,3 +363,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 2500);
 });
+
+/* ── Message + notification polling ──────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  // Poll notifications badge every 15 seconds
+  setInterval(async () => {
+    const user = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
+    if (!user.id) return;
+    try {
+      const { data } = await db.from('notifications')
+        .select('id').eq('user_id', user.id).eq('read', false);
+      const count = data?.length || 0;
+      ['nav-notifications','bnav-notifications'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        let badge = el.querySelector('.nav-badge');
+        if (count > 0) {
+          if (!badge) { badge = document.createElement('span'); badge.className = 'nav-badge'; el.appendChild(badge); }
+          badge.textContent = count;
+        } else if (badge) badge.remove();
+      });
+    } catch(e) {}
+  }, 15000);
+
+  // Poll messages every 5 seconds when on messages tab
+  setInterval(() => {
+    if (typeof currentTab !== 'undefined' && currentTab === 'messages') {
+      if (typeof loadStudentMessages === 'function') loadStudentMessages();
+    }
+  }, 5000);
+});

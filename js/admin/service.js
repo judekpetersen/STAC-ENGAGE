@@ -98,10 +98,20 @@ window.approveServiceHours = async function(id) {
     await updateServiceHours(id, 'approved', '');
     const h = liveServiceHours.find(x => x.id === id);
     if (h) h.status = 'approved';
-    showToast(`Approved — student earned ${Math.floor((liveServiceHours.find(x=>x.id===id)?.hours||0)*10)} pts.`);
+    const pts = Math.floor((h?.hours || 0) * 10);
+    // Award points
+    if (h?.user_id) {
+      await db.rpc('add_score', { p_user_id: h.user_id, p_points: pts });
+      // Notify student
+      await db.from('notifications').insert({
+        user_id: h.user_id, type: 'update', read: false,
+        text: `Your service hours for "${h.org_name}" (${h.hours} hrs) were approved! +${pts} pts 🎉`
+      });
+    }
+    showToast(`Approved — student earned ${pts} pts and was notified.`);
     const list = document.getElementById('service-list');
     if (list) list.innerHTML = serviceListHTML(liveServiceHours);
-  } catch(e) { showToast('Could not approve — check connection.'); }
+  } catch(e) { console.error(e); showToast('Could not approve — check connection.'); }
 };
 
 window.denyServiceHours = async function(id) {
@@ -110,7 +120,14 @@ window.denyServiceHours = async function(id) {
     await updateServiceHours(id, 'denied', note);
     const h = liveServiceHours.find(x => x.id === id);
     if (h) { h.status = 'denied'; h.admin_note = note; }
-    showToast('Submission denied.');
+    // Notify student
+    if (h?.user_id) {
+      await db.from('notifications').insert({
+        user_id: h.user_id, type: 'update', read: false,
+        text: `Your service hours submission for "${h.org_name}" was not approved.${note ? ' Reason: ' + note : ''}`
+      });
+    }
+    showToast('Submission denied — student notified.');
     const list = document.getElementById('service-list');
     if (list) list.innerHTML = serviceListHTML(liveServiceHours);
   } catch(e) { showToast('Could not deny — check connection.'); }

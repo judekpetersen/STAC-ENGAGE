@@ -112,9 +112,20 @@ function adminNotifyStudent(id) {
   const s = ADMIN_STUDENTS.find(x => x.id === id);
   if (s) showToast(`Outreach sent to ${s.name}.`);
 }
-function flagForAdvisor(id) {
+async function flagForAdvisor(id) {
   const s = ADMIN_STUDENTS.find(x => x.id === id);
-  if (s) showToast(`${s.name} flagged for advisor follow-up.`);
+  if (!s) return;
+  try {
+    // Notify the student
+    await db.from('notifications').insert({
+      user_id: id, type: 'update', read: false,
+      text: 'Your Student Engagement advisor would like to connect with you. Please stop by the Student Engagement office or check your STAC email.',
+    });
+    showToast(`${s.name} notified — they'll receive a message to connect with their advisor.`);
+  } catch(e) {
+    console.warn('Flag failed:', e);
+    showToast(`${s.name} flagged for advisor follow-up.`);
+  }
 }
 function openSpotForWaitlist() {
   showToast('First student on waitlist notified of available spot.');

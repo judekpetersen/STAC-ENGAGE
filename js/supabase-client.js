@@ -77,9 +77,11 @@ async function upsertProfile(userId, fields) {
 // ── Events ───────────────────────────────────────────────────
 
 async function fetchEvents() {
+  const today = new Date().toISOString().split('T')[0];
   const { data, error } = await db
     .from('events')
     .select('*')
+    .gte('event_date', today)
     .order('event_date', { ascending: true });
   if (error) throw error;
   return data || [];

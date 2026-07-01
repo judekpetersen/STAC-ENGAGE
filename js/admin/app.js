@@ -189,3 +189,32 @@ function launchConfetti() {
   }
   setTimeout(() => container.remove(), 3000);
 }
+
+/* ── Admin notification badge polling ────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  setInterval(async () => {
+    try {
+      // Get admin identity
+      let adminId;
+      const { data: { user } } = await db.auth.getUser();
+      adminId = user?.id;
+      if (!adminId) {
+        const { data: admins } = await db.from('profiles').select('id').eq('role','admin').limit(1);
+        adminId = admins?.[0]?.id;
+      }
+      if (!adminId) return;
+
+      const { data } = await db.from('notifications')
+        .select('id').eq('user_id', adminId).eq('read', false);
+      const count = data?.length || 0;
+
+      const el = document.getElementById('anav-notifications');
+      if (!el) return;
+      let badge = el.querySelector('.nav-badge');
+      if (count > 0) {
+        if (!badge) { badge = document.createElement('span'); badge.className = 'nav-badge'; el.appendChild(badge); }
+        badge.textContent = count;
+      } else if (badge) badge.remove();
+    } catch(e) {}
+  }, 15000);
+});

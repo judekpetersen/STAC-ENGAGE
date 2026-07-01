@@ -156,3 +156,19 @@ async function sendStudentMessage() {
 document.addEventListener('DOMContentLoaded', function() {
   setTimeout(loadStudentMessages, 800);
 });
+
+/* ── Auto-poll messages every 5s when on tab ──────────── */
+let _msgPollInterval = null;
+
+function startMessagePolling() {
+  stopMessagePolling();
+  _msgPollInterval = setInterval(() => {
+    if (typeof currentTab !== 'undefined' && currentTab === 'messages') {
+      loadStudentMessages();
+    }
+  }, 5000);
+}
+
+function stopMessagePolling() {
+  if (_msgPollInterval) { clearInterval(_msgPollInterval); _msgPollInterval = null; }
+}

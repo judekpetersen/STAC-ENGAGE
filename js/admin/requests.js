@@ -134,30 +134,40 @@ function setRequestFilter(f) {
   if (content) content.innerHTML = renderAdminRequests();
 }
 
-function approveRequest(id) {
-  eventRequestState[id] = 'approved';
-  // Also add to student-visible calendar
+async function approveRequest(id) {
   const r = EVENT_REQUESTS.find(x => x.id === id);
+  try {
+    // Update status in Supabase
+    await db.from('event_requests').update({ status: 'approved' }).eq('id', id);
+    // Publish as real event
+    if (r) {
+      await db.from('events').insert({
+        title: r.title, event_date: r.date,
+        start_time: r.start, end_time: r.end,
+        location: r.space || 'TBD', type: 'org',
+        capacity: r.attendance || 100, points: r.points || 50,
+      });
+    }
+    // Notify student
+    if (r?.userId) {
+      await db.from('notifications').insert({
+        user_id: r.userId, type: 'event', read: false,
+        text: `Your event request "${r.title}" was approved and added to the campus calendar! 🎉`
+      });
+    }
+  } catch(e) { console.warn('Approve request DB failed:', e); }
+
+  eventRequestState[id] = 'approved';
   if (r) {
     CALENDAR_EVENTS.push({
-      id: 'req-' + id,
-      title: r.title,
-      date: r.date,
-      start: r.start,
-      end: r.end,
-      type: 'org',
-      color: '#6b1a1a',
-      bg: '#FBE6E6',
-      space: r.space,
-      rsvp: false,
+      id: 'req-' + id, title: r.title, date: r.date,
+      start: r.start, end: r.end, type: 'org',
+      color: '#6b1a1a', bg: '#FBE6E6', space: r.space, rsvp: false,
     });
   }
   refreshRequestCard(id);
-  showToast('Event approved and published to the campus calendar.');
+  showToast('Event approved — student notified and event published to campus calendar.');
   updateRequestBadge();
-  // TODO (Supabase): await db.from('event_requests').update({ status: 'approved' }).eq('id', id);
-  // await db.from('events').insert({ ...r, public: true });
-  // await db.from('notifications').insert({ user_id: r.user_id, text: `Your event "${r.title}" was approved!` });
 }
 
 function showDenyForm(id) {

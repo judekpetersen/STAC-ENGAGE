@@ -19,8 +19,8 @@ async function loadAdminThreads() {
     // Also load all students for new message dropdown
     const { data: students } = await db.from('profiles').select('id,first_name,last_name,major,year').order('first_name');
     adminStudentMap = {};
-    const adminUser = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
-    const adminId   = adminUser.id;
+    const { data: { user: sessionUser } } = await db.auth.getUser();
+    const adminId = sessionUser?.id || (await db.from('profiles').select('id').eq('role','admin').limit(1)).data?.[0]?.id;
     (students || []).forEach(s => {
       if (s.id === adminId) return; // skip admin's own profile
       adminStudentMap[s.id] = {
@@ -181,13 +181,21 @@ async function sendAdminMessage() {
   const val = inp ? inp.value.trim() : '';
   if (!val || !activeThreadId) return;
 
-  // Get admin's real UUID from localStorage
-  const adminUser = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
-  if (!adminUser.id) { showToast('Not signed in.'); return; }
+  // Get admin identity — try Supabase session first, then role lookup
+  let adminId;
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    adminId = user?.id;
+  } catch(e) {}
+  if (!adminId) {
+    const { data: admins } = await db.from('profiles').select('id').eq('role','admin').limit(1);
+    adminId = admins?.[0]?.id;
+  }
+  if (!adminId) { showToast('Could not identify admin account.'); return; }
 
   try {
     const { error } = await db.from('messages').insert({
-      sender_id:    adminUser.id,
+      sender_id:    adminId,
       recipient_id: activeThreadId,
       text:         val,
     });
@@ -278,12 +286,13 @@ async function submitNewAdminMessage() {
   const text      = document.getElementById('nm-text')?.value.trim();
   if (!studentId || !text) { alert('Please select a student and enter a message.'); return; }
 
-  const adminUser = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
-  if (!adminUser.id) { showToast('Not signed in.'); return; }
+  const { data: { user: adminUser } } = await db.auth.getUser();
+  const adminId = adminUser?.id || (await db.from('profiles').select('id').eq('role','admin').limit(1)).data?.[0]?.id;
+  if (!adminId) { showToast('Could not identify admin account.'); return; }
 
   try {
     const { error } = await db.from('messages').insert({
-      sender_id: adminUser.id, recipient_id: studentId, text,
+      sender_id: adminId, recipient_id: studentId, text,
     });
     if (error) throw error;
 
@@ -302,3 +311,18 @@ async function submitNewAdminMessage() {
     alert('Could not send message — check connection.');
   }
 }
+
+/* ── Auto-poll admin messages every 5s when on tab ───── */
+let _adminMsgPoll = null;
+
+function startAdminMessagePolling() {
+  if (_adminMsgPoll) return;
+  _adminMsgPoll = setInterval(() => {
+    if (typeof currentAdminTab !== 'undefined' && currentAdminTab === 'messages') {
+      loadAdminThreads();
+    }
+  }, 5000);
+}
+
+// Start polling immediately
+document.addEventListener('DOMContentLoaded', () => startAdminMessagePolling());
