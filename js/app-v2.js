@@ -354,3 +354,12 @@ async function handleCheckinFromURL() {
 document.addEventListener('DOMContentLoaded', function() {
   setTimeout(handleCheckinFromURL, 1000);
 });
+
+/* ── Post-event feedback check on load ───────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(() => {
+    if (typeof checkAndSendFeedbackPrompts === 'function') {
+      checkAndSendFeedbackPrompts();
+    }
+  }, 2500);
+});

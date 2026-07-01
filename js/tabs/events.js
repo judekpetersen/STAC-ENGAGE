@@ -77,7 +77,7 @@ function setDiningMeal(meal) {
 function C_eventRowV7(e) {
   const isFull     = e.capacity && e.rsvpCount >= e.capacity;
   const onWaitlist = waitlistState[e.id];
-  const needsFeedback = false; // feedback prompts disabled until post-launch
+  const needsFeedback = false; // handled by feedback.js post-event survey system
 
   return `<div class="row">
     <div class="date-box" style="background:${e.tc};border:1px solid ${e.bc}25;">

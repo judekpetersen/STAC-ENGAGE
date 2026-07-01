@@ -16,6 +16,7 @@ const ADMIN_TABS = [
   { id:'requests',      icon:'ti-calendar-plus',   label:'Event requests',   group:'main', badge: () => EVENT_REQUESTS.filter(r => eventRequestState[r.id] === 'pending').length || null },
   { id:'messages',      icon:'ti-message-circle',   label:'Messages',         group:'main', badge: () => Object.values(MESSAGE_THREADS).filter(t => t.messages.length && t.messages[t.messages.length-1].from==='student').length || null },
   { id:'notifications',  icon:'ti-send',             label:'Notifications',    group:'main' },
+  { id:'feedback',       icon:'ti-star',              label:'Event feedback',   group:'main' },
   { id:'settings',       icon:'ti-settings',          label:'Settings',         group:'main' },
 ];
 
@@ -33,13 +34,14 @@ const ADMIN_RENDERERS = {
   positions:      renderAdminPositions,
   academic:       renderAdminAcademic,
   service:        renderAdminService,
+  feedback:       () => typeof renderAdminFeedback === 'function' ? renderAdminFeedback() : '',
   settings:       () => typeof renderAdminSettings === 'function' ? renderAdminSettings() : '',
 };
 
 const ADMIN_TITLES = {
   overview:'Overview', bookings:'Space Bookings', events:'Event Management',
   calendar:'Campus Calendar', checkin:'QR Check-in', students:'Students', reports:'Reports',
-  notifications:'Notifications', requests:'Event Requests', messages:'Messages', positions:'Officer Positions', academic:'Academic Calendar', service:'Service Hours', settings:'Settings',
+  notifications:'Notifications', requests:'Event Requests', messages:'Messages', positions:'Officer Positions', academic:'Academic Calendar', service:'Service Hours', feedback:'Event Feedback', settings:'Settings',
 };
 
 let currentAdminTab = 'overview';
@@ -97,6 +99,7 @@ function adminSwitchTab(tabId) {
   if (tabId === 'messages')  loadAdminThreads();
   if (tabId === 'events')    loadAdminEventsFromDB();
   if (tabId === 'calendar')  loadAdminCalendarFromDB();
+  if (tabId === 'feedback')  loadFeedbackFromDB();
   if (tabId === 'overview') { loadStudentsFromDB(); }
 
   closeSidebar();

@@ -188,7 +188,8 @@ async function confirmDenyRequest(id) {
 }
 
 function showRequestNote(id) {
-  showToast('Messaging feature coming with Supabase wiring.');
+  showToast('Opening messages...');
+  setTimeout(() => adminSwitchTab('messages'), 300);
 }
 
 function revokeRequest(id) {

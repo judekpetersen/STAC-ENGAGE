@@ -294,16 +294,22 @@ async function createNewOrg() {
     pts:   0,
   };
 
-  // Add to DATA.orgs so students see it immediately
+  try {
+    await db.from('orgs').insert({
+      name, description: desc || '',
+      icon, color: colors.color, bg: colors.bg, ic: colors.ic,
+    });
+  } catch(e) { console.warn('Org create failed:', e); }
+
+  // Add to local state so students see it immediately without refresh
   DATA.orgs.push(newOrg);
   DATA.clubs.push({ name, pts: 0, color: colors.color });
 
-  // TODO (Supabase): await db.from('orgs').insert({ name, description: desc, icon, ...colors });
-
   closeNewOrgModal();
   showToast(`"${name}" created and visible to students.`);
+  launchConfetti();
 
-  // Refresh positions page to show updated org list
+  // Refresh positions page
   const content = document.getElementById('admin-content');
   if (content) content.innerHTML = renderAdminPositions();
 }

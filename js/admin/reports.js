@@ -152,7 +152,55 @@ function renderAdminReports() {
   </div>`;
 }
 
-function exportReport(format) {
-  showToast(`Report exported as ${format.toUpperCase()} — check your downloads.`);
-  // TODO (Supabase Edge Function): call /functions/v1/export-report?format=csv&semester=spring-2026
+async function exportReport(format) {
+  try {
+    if (format === 'csv') {
+      // Fetch full data from Supabase
+      const { data: students } = await db
+        .from('profiles')
+        .select('first_name, last_name, major, year, score, streak_weeks')
+        .order('score', { ascending: false });
+
+      const { data: rsvps } = await db
+        .from('rsvps')
+        .select('user_id, checked_in, events(title, event_date)');
+
+      const { data: service } = await db
+        .from('service_hours')
+        .select('user_id, hours, status');
+
+      // Build CSV
+      const rows = (students || []).map(s => {
+        const myRsvps   = (rsvps || []).filter(r => r.user_id === s.id);
+        const myService = (service || []).filter(h => h.user_id === s.id && h.status === 'approved');
+        const totalHrs  = myService.reduce((t, h) => t + parseFloat(h.hours || 0), 0);
+        return [
+          `${s.first_name} ${s.last_name}`,
+          s.major || '',
+          s.year || '',
+          s.score || 0,
+          myRsvps.length,
+          myRsvps.filter(r => r.checked_in).length,
+          totalHrs.toFixed(1),
+          s.streak_weeks || 0,
+        ].join(',');
+      });
+
+      const header = 'Name,Major,Year,Score,RSVPs,Check-ins,Service Hours,Streak Weeks';
+      const csv    = [header, ...rows].join('\n');
+      const blob   = new Blob([csv], { type: 'text/csv' });
+      const url    = URL.createObjectURL(blob);
+      const a      = document.createElement('a');
+      a.href = url;
+      a.download = `stac-engage-report-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Report exported as CSV.');
+    } else {
+      showToast('PDF export coming soon — use CSV for now.');
+    }
+  } catch(e) {
+    console.error('Export failed:', e);
+    showToast('Export failed — check connection.');
+  }
 }
