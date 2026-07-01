@@ -60,15 +60,15 @@ async function loadLeaderboardFromDB() {
     const data = await fetchLeaderboard();
     DATA.leaderboard = data.map((u, i) => ({
       rank: i + 1,
-      name: u.first_name + ' ' + u.last_name,
-      ini:  (u.first_name[0] || '') + (u.last_name[0] || ''),
+      name: ((u.first_name || '') + ' ' + (u.last_name || '')).trim() || 'Student',
+      ini:  ((u.first_name || '?')[0] + (u.last_name || '?')[0]).toUpperCase(),
       score: u.score,
       major: u.major || '',
       bg: '#FBE6E6', fc: '#6b1a1a',
     }));
     const content = document.getElementById('app-content');
     const active  = document.querySelector('.nav-item.active');
-    if (content && active && active.dataset.tab === 'leaderboard') {
+    if (content && active && (active.id === 'nav-leaderboard' || active.id === 'bnav-leaderboard')) {
       content.innerHTML = renderLeaderboard();
     }
   } catch(e) { console.warn('Leaderboard load failed:', e); }

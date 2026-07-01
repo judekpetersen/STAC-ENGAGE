@@ -257,19 +257,15 @@
       if (error) throw error;
 
       const staticIds = new Set(['ce1','ce2','ce3','ce4','ce5','ce6','ce7','ce8','ce9']);
-      for (let i = CALENDAR_EVENTS.length - 1; i >= 0; i--) {
-        if (!staticIds.has(CALENDAR_EVENTS[i].id)) CALENDAR_EVENTS.splice(i, 1);
-      }
+      CALENDAR_EVENTS.length = 0;
       (data || []).forEach(e => {
-        if (!CALENDAR_EVENTS.find(c => c.id === e.id)) {
-          CALENDAR_EVENTS.push({
-            id: e.id, title: e.title, date: e.event_date,
-            start: e.start_time || '', end: e.end_time || '',
-            type: e.type || 'general', color: e.color || '#6b1a1a',
-            bg: e.bg || '#FBE6E6', space: e.location || '',
-            points: e.points || 50,
-          });
-        }
+        CALENDAR_EVENTS.push({
+          id: e.id, title: e.title, date: e.event_date,
+          start: e.start_time || '', end: e.end_time || '',
+          type: e.type || 'general', color: e.color || '#6b1a1a',
+          bg: e.bg || '#FBE6E6', space: e.location || '',
+          points: e.points || 50,
+        });
       });
 
       const content = document.getElementById('admin-content');

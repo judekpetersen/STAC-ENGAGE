@@ -332,32 +332,32 @@ async function loadCalendarEventsFromDB() {
       : { data: [] };
     const rsvpSet = new Set((rsvps || []).map(r => r.event_id));
 
-    // Remove existing DB events and re-add fresh
-    const staticIds = new Set(['ce1','ce2','ce3','ce4','ce5','ce6','ce7','ce8','ce9']);
-    for (let i = CALENDAR_EVENTS.length - 1; i >= 0; i--) {
-      if (!staticIds.has(CALENDAR_EVENTS[i].id)) CALENDAR_EVENTS.splice(i, 1);
-    }
+    // Remove ALL existing events and replace with fresh Supabase data
+    // (Static placeholder events from spaces-data.js are intentionally cleared)
+    CALENDAR_EVENTS.length = 0;
 
     (data || []).forEach(e => {
-      if (!CALENDAR_EVENTS.find(c => c.id === e.id)) {
-        CALENDAR_EVENTS.push({
-          id:    e.id,
-          title: e.title,
-          date:  e.event_date,
-          start: e.start_time || '',
-          end:   e.end_time || '',
-          type:  e.type || 'general',
-          color: e.color || '#6b1a1a',
-          bg:    e.bg || '#FBE6E6',
-          space: e.location || '',
-          rsvp:  rsvpSet.has(e.id),
-          points: e.points || 50,
-          description: e.description || '',
-        });
-      }
+      CALENDAR_EVENTS.push({
+        id:    e.id,
+        title: e.title,
+        date:  e.event_date,
+        start: e.start_time || '',
+        end:   e.end_time || '',
+        type:  e.type || 'general',
+        color: e.color || '#6b1a1a',
+        bg:    e.bg || '#FBE6E6',
+        space: e.location || '',
+        rsvp:  rsvpSet.has(e.id),
+        points: e.points || 50,
+        description: e.description || '',
+      });
     });
 
     // Re-render calendar if on that tab
+    const content = document.getElementById('app-content');
+    if (content && typeof currentTab !== 'undefined' && currentTab === 'calendar') {
+      content.innerHTML = typeof renderCalendar === 'function' ? renderCalendar() : '';
+    }
     if (typeof currentTab !== 'undefined' && currentTab === 'calendar') {
       const content = document.getElementById('app-content');
       if (content && typeof renderCalendar === 'function') {

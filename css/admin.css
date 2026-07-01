@@ -182,3 +182,14 @@
   .data-table th:nth-child(n+4),
   .data-table td:nth-child(n+4) { display: none; }
 }
+
+/* ── Admin Settings ──────────────────────────────────────── */
+.pref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pref-row:last-child { border-bottom: none; }

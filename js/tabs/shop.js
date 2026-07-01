@@ -67,15 +67,40 @@ function prizeCard(s) {
     </div>`;
 }
 
-function redeemPrize(id) {
-  const item = SHOP_PRIZES.find(s => s.id === id);
-  const score = getState().user.score;
-  if (score < item.cost && !isRedeemed(id)) {
+async function redeemPrize(id) {
+  const item  = SHOP_PRIZES.find(s => s.id === id);
+  const state = getState();
+  const score = state.user.score || 0;
+  if (isRedeemed(id)) { showToast('Already redeemed!'); return; }
+  if (score < item.cost) {
     showToast(`You need ${item.cost - score} more points for this.`);
     return;
   }
+  const user = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
+  try {
+    // Write redemption to Supabase
+    await db.from('redemptions').insert({
+      user_id: user.id,
+      item_id: String(id),
+      item_name: item.name,
+      cost: item.cost,
+      type: item.raffle ? 'raffle' : 'redemption',
+    });
+    // Deduct points
+    await db.rpc('add_score', { p_user_id: user.id, p_points: -item.cost });
+    // Notify admin
+    const { data: admins } = await db.from('profiles').select('id').eq('role','admin').limit(1);
+    if (admins?.[0]) {
+      await db.from('notifications').insert({
+        user_id: admins[0].id, type: 'update', read: false,
+        text: `${state.user.firstName || 'A student'} redeemed "${item.name}" for ${item.cost} points.`
+      });
+    }
+  } catch(e) { console.warn('Redeem failed:', e); }
   redeemItem(id);
-  showToast(item.raffle ? `Entered into the ${item.name} raffle!` : `${item.name} redeemed!`);
+  state.user.score = Math.max(0, score - item.cost);
+  saveState();
+  showToast(item.raffle ? `Entered into the ${item.name} raffle! 🎉` : `${item.name} redeemed! 🎉`);
   const content = document.getElementById('app-content');
   if (content) content.innerHTML = renderShop();
 }

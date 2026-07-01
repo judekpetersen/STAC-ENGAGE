@@ -74,7 +74,8 @@ function viewListing(id) {
 
 function contactSeller(id) {
   const l = MARKETPLACE_LISTINGS.find(x => x.id === id);
-  showToast(`Message sent to ${l.seller}.`);
+  showToast(`Opening messages — reach out to ${l.seller} directly.`);
+  setTimeout(() => switchTab('messages'), 500);
 }
 
 function openNewListing() {

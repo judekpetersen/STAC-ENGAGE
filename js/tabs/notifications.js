@@ -79,7 +79,7 @@ async function loadNotificationsFromDB() {
     }));
     const content = document.getElementById('app-content');
     const active  = document.querySelector('.nav-item.active');
-    if (content && active && active.dataset?.tab === 'notifications') {
+    if (content && active && (active.id === 'nav-notifications' || active.id === 'bnav-notifications')) {
       content.innerHTML = renderNotifications();
     }
     // Update badge

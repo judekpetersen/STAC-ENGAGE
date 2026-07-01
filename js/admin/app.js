@@ -16,6 +16,7 @@ const ADMIN_TABS = [
   { id:'requests',      icon:'ti-calendar-plus',   label:'Event requests',   group:'main', badge: () => EVENT_REQUESTS.filter(r => eventRequestState[r.id] === 'pending').length || null },
   { id:'messages',      icon:'ti-message-circle',   label:'Messages',         group:'main', badge: () => Object.values(MESSAGE_THREADS).filter(t => t.messages.length && t.messages[t.messages.length-1].from==='student').length || null },
   { id:'notifications',  icon:'ti-send',             label:'Notifications',    group:'main' },
+  { id:'settings',       icon:'ti-settings',          label:'Settings',         group:'main' },
 ];
 
 const ADMIN_RENDERERS = {
@@ -32,12 +33,13 @@ const ADMIN_RENDERERS = {
   positions:      renderAdminPositions,
   academic:       renderAdminAcademic,
   service:        renderAdminService,
+  settings:       () => typeof renderAdminSettings === 'function' ? renderAdminSettings() : '',
 };
 
 const ADMIN_TITLES = {
   overview:'Overview', bookings:'Space Bookings', events:'Event Management',
   calendar:'Campus Calendar', checkin:'QR Check-in', students:'Students', reports:'Reports',
-  notifications:'Notifications', requests:'Event Requests', messages:'Messages', positions:'Officer Positions', academic:'Academic Calendar', service:'Service Hours',
+  notifications:'Notifications', requests:'Event Requests', messages:'Messages', positions:'Officer Positions', academic:'Academic Calendar', service:'Service Hours', settings:'Settings',
 };
 
 let currentAdminTab = 'overview';
@@ -154,3 +156,33 @@ function initAdminApp() {
 }
 
 document.addEventListener('DOMContentLoaded', initAdminApp);
+
+/* ── Confetti for admin ───────────────────────────────── */
+function launchConfetti() {
+  const colors = ['#6b1a1a','#c8b560','#3B6D11','#1a3a6b','#993556','#854F0B'];
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
+  document.body.appendChild(container);
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size  = Math.random() * 8 + 5;
+    el.style.cssText = `
+      position:absolute;top:-20px;left:${Math.random()*100}%;
+      width:${size}px;height:${size}px;background:${color};
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      animation:confettiFall ${Math.random()*1.5+1.5}s ${Math.random()*0.5}s ease-in forwards;
+    `;
+    container.appendChild(el);
+  }
+  if (!document.getElementById('confetti-style')) {
+    const style = document.createElement('style');
+    style.id = 'confetti-style';
+    style.textContent = `@keyframes confettiFall {
+      0%   { transform:translateY(0) rotate(0deg); opacity:1; }
+      100% { transform:translateY(100vh) rotate(720deg); opacity:0; }
+    }`;
+    document.head.appendChild(style);
+  }
+  setTimeout(() => container.remove(), 3000);
+}

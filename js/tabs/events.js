@@ -396,14 +396,28 @@ window.renderEvents = function() {
 async function loadEventsFromDB() {
   try {
     const events = await fetchEvents();
-    DATA.events = events.map(e => ({
-      id: e.id, name: e.title, title: e.title, date: e.event_date,
-      start: e.start_time, end: e.end_time,
-      location: e.location, space: e.location || e.space,
-      capacity: e.capacity, points: e.points,
-      type: e.type, color: e.color || '#6b1a1a',
-      bg: e.bg || '#FBE6E6', rsvp: false,
-    }));
+    DATA.events = events.map(e => {
+      const color  = e.color || '#6b1a1a';
+      const bg     = e.bg    || '#FBE6E6';
+      const date   = e.event_date || '';
+      const parts  = date.split('-');
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const month  = parts[1] ? months[parseInt(parts[1]) - 1] : '';
+      const day    = parts[2] ? parseInt(parts[2]).toString() : '';
+      return {
+        id: e.id, name: e.title, title: e.title, date,
+        start: e.start_time, end: e.end_time,
+        location: e.location, space: e.location || e.space || '',
+        capacity: e.capacity || 100, points: e.points || 50,
+        type: e.type || 'general', color, bg, rsvp: false,
+        // Shorthand aliases used by C_eventRowV7
+        tc: bg, bc: color,
+        month, day,
+        loc: e.location || e.space || 'STAC Campus',
+        pts: e.points || 50,
+        rsvpCount: 0,
+      };
+    });
     // Load this user's RSVPs
     const user = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
     if (user.id) {
@@ -417,4 +431,31 @@ async function loadEventsFromDB() {
       content.innerHTML = renderEvents();
     }
   } catch(e) { console.warn('Events load failed:', e); }
+}
+
+/* ── Post-event: auto-notify attendees when event date passes ── */
+async function checkPastEvents() {
+  const today = new Date().toISOString().split('T')[0];
+  const user  = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
+  if (!user.id) return;
+  try {
+    // Find past events this student RSVPd to that haven't been notified yet
+    const { data: rsvps } = await db
+      .from('rsvps')
+      .select('event_id, events(title, event_date, points)')
+      .eq('user_id', user.id)
+      .eq('checked_in', false);
+    if (!rsvps) return;
+    for (const r of rsvps) {
+      const e = r.events;
+      if (!e || !e.event_date) continue;
+      if (e.event_date < today) {
+        // Event has passed — remind student to check in or give feedback
+        await db.from('notifications').insert({
+          user_id: user.id, type: 'event', read: false,
+          text: `"${e.title}" has ended. If you attended, ask your admin to check you in for ${e.points || 50} points!`
+        });
+      }
+    }
+  } catch(e) { /* silent */ }
 }

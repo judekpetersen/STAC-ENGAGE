@@ -176,6 +176,7 @@ async function adminCreateEvent() {
 
     showToast(`"${name}" published to students.`);
     toggleEventForm();
+    launchConfetti();
     await loadAdminEventsFromDB();
   } catch(e) {
     console.error('Create event failed:', e);
