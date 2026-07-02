@@ -172,7 +172,12 @@ async function initApp() {
   try {
     const u = JSON.parse(localStorage.getItem('stac_engage_user') || 'null');
     loadState();
-    if (u) { const s = getState(); s.user = Object.assign(s.user, u); }
+    if (u) {
+      const s = getState();
+      s.user = Object.assign(s.user, u);
+      // Set global student ID for positions and profile
+      if (u.id) window.CURRENT_STUDENT_ID = u.id;
+    }
   } catch(e) { loadState(); }
 
   const overlay = document.createElement('div');
@@ -234,9 +239,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Load all shared data from Supabase on app start
 async function loadLiveData() {
-  try { await loadEventsFromDB(); }    catch(e) {}
+  try { await loadEventsFromDB(); }      catch(e) {}
   try { await loadLeaderboardFromDB(); } catch(e) {}
-  try { await loadFeedFromDB(); }      catch(e) {}
+  try { await loadFeedFromDB(); }        catch(e) {}
+  try { await loadOrgsFromDB(); }        catch(e) {}
+  try { await loadMyPositionsFromDB(); } catch(e) {}
+  try { await loadNotificationsFromDB(); } catch(e) {}
+  try { await loadTranscriptFromDB(); }  catch(e) {}
   try {
     const anns = await fetchGameAnnouncements();
     if (anns.length) {
@@ -261,6 +270,10 @@ window.switchTab = function(tabId) {
   if (tabId === 'service')     { try { loadStudentServiceHours(); } catch(e) {} }
   if (tabId === 'streaks')     { try { loadStreaksFromDB(); }     catch(e) {} }
   if (tabId === 'calendar')    { try { loadCalendarEventsFromDB(); } catch(e) {} }
+  if (tabId === 'orgs')        { try { loadOrgsFromDB(); }        catch(e) {} }
+  if (tabId === 'profile')     { try { loadMyPositionsFromDB(); } catch(e) {} }
+  if (tabId === 'transcript')  { try { loadTranscriptFromDB(); }  catch(e) {} }
+  if (tabId === 'notifications') { try { loadNotificationsFromDB(); } catch(e) {} }
 };
 
 // Subscribe to realtime feed updates

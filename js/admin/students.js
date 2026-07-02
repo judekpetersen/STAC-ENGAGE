@@ -11,6 +11,7 @@ async function loadStudentsFromDB() {
     const { data, error } = await db
       .from('profiles')
       .select('*')
+      .eq('role', 'student')
       .order('score', { ascending: false });
     if (error) throw error;
 
@@ -126,8 +127,20 @@ function renderAdminStudents() {
   </div>`;
 }
 
-function sendStudentNotif(id) {
-  showToast('Notification sent to student.');
+async function sendStudentNotif(id) {
+  const s = liveStudents.find(x => x.id === id);
+  const name = s ? s.name.split(' ')[0] : 'Student';
+  const msg = prompt(`Message to send to ${name}:`, 'Reminder: Check out upcoming events on STAC Engage!');
+  if (!msg) return;
+  try {
+    await db.from('notifications').insert({
+      user_id: id, type: 'update', read: false, text: msg,
+    });
+    showToast(`Notification sent to ${name}.`);
+  } catch(e) {
+    console.error(e);
+    showToast('Could not send — check connection.');
+  }
 }
 
 function viewStudentProfile(id) {

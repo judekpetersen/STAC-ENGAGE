@@ -3,7 +3,7 @@
    Handles: offline caching, background sync, push notifications
    ============================================================ */
 
-const APP_VERSION   = 'stac-engage-v2.1.0';
+const APP_VERSION   = 'stac-engage-v2.2.0';
 const CACHE_STATIC  = `${APP_VERSION}-static`;
 const CACHE_DYNAMIC = `${APP_VERSION}-dynamic`;
 

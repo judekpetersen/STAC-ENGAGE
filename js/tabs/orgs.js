@@ -81,3 +81,20 @@ function doJoinOrg(i, btn) {
   btn.className = 'tbtn ' + (on ? 'on' : '');
   btn.textContent = on ? 'Joined' : 'Join';
 }
+
+/* ── Load orgs from Supabase ─────────────────────────── */
+async function loadOrgsFromDB() {
+  try {
+    const data = await fetchOrgs();
+    DATA.orgs = data.map(o => ({
+      id: o.id, name: o.name, description: o.description || '',
+      icon: o.icon || 'ti-users', color: o.color || '#6b1a1a',
+      bg: o.bg || '#FBE6E6', ic: o.ic || '#6b1a1a',
+      members: 0, joined: false,
+    }));
+    const content = document.getElementById('app-content');
+    if (typeof currentTab !== 'undefined' && currentTab === 'orgs' && content) {
+      content.innerHTML = renderOrgs();
+    }
+  } catch(e) { console.warn('Orgs load failed:', e); }
+}

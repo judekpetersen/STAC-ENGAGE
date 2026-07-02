@@ -349,3 +349,26 @@ function closeEditProfileModal() {
   const m = document.getElementById('edit-profile-modal');
   if (m) m.remove();
 }
+
+/* ── Load current student's positions from Supabase ─── */
+async function loadMyPositionsFromDB() {
+  const user = JSON.parse(localStorage.getItem('stac_engage_user') || '{}');
+  if (!user.id) return;
+  try {
+    const { data, error } = await db
+      .from('student_positions')
+      .select('position, org')
+      .eq('user_id', user.id);
+    if (error) throw error;
+    // Store in STUDENT_POSITIONS for profile render
+    if (!window.STUDENT_POSITIONS) window.STUDENT_POSITIONS = {};
+    STUDENT_POSITIONS[user.id] = data || [];
+    // Set CURRENT_STUDENT_ID
+    window.CURRENT_STUDENT_ID = user.id;
+    // Re-render profile if on that tab
+    const content = document.getElementById('app-content');
+    if (typeof currentTab !== 'undefined' && currentTab === 'profile' && content) {
+      content.innerHTML = renderProfile();
+    }
+  } catch(e) { console.warn('Positions load failed:', e); }
+}

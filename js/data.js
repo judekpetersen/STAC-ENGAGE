@@ -115,7 +115,7 @@ function isOfficer(studentId) {
   if (!studentId) return false;
   return !!(STUDENT_POSITIONS[studentId] && STUDENT_POSITIONS[studentId].length > 0);
 }
-const CURRENT_STUDENT_ID = null; // Set from Supabase session
+let CURRENT_STUDENT_ID = null; // Set dynamically from localStorage
 
 // ── Shop prizes ───────────────────────────────────────────────
 const SHOP_PRIZES = [

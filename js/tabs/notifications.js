@@ -5,15 +5,13 @@ let liveNotifications = [];
    ============================================================ */
 
 function renderNotifications() {
-  const notifs = liveNotifications.length > 0
-    ? liveNotifications.map(n => ({
-        id: n.id, text: n.text, unread: !n.read,
-        icon: n.type === 'event' ? 'ti-calendar-event' : n.type === 'badge' ? 'ti-medal' : 'ti-bell',
-        iconBg: n.type === 'event' ? '#FBE6E6' : n.type === 'badge' ? '#FAEEDA' : '#E1F5EE',
-        iconC:  n.type === 'event' ? '#6b1a1a' : n.type === 'badge' ? '#854F0B' : '#0F6E56',
-        time: timeAgoNotif(n.created_at),
-      }))
-    : DATA.notifications;
+  const notifs = liveNotifications.map(n => ({
+    id: n.id, text: n.text, unread: !n.read,
+    icon: n.type === 'event' ? 'ti-calendar-event' : n.type === 'badge' ? 'ti-medal' : 'ti-bell',
+    iconBg: n.type === 'event' ? '#FBE6E6' : n.type === 'badge' ? '#FAEEDA' : '#E1F5EE',
+    iconC:  n.type === 'event' ? '#6b1a1a' : n.type === 'badge' ? '#854F0B' : '#0F6E56',
+    time: timeAgoNotif(n.created_at),
+  }));
 
   const unread = notifs.filter(n => n.unread).length;
   return `<div class="page-animate">
